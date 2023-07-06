@@ -1,11 +1,17 @@
 #!/usr/bin/python3
-# Fetch from given URL using `urllib` package
-import urllib.request
+"""Sends a search request for a given string to the Star Wars API.
+
+Usage: ./9-starwars.py <search string>
+  - The search request is sent to the Star Wars API search people endpoint.
+"""
+import sys
+import requests
+
 
 if __name__ == "__main__":
-    with urllib.request.urlopen('https://intranet.hbtn.io/status') as res:
-        content = res.read()
-        print("Body response:")
-        print("\t- type: {}".format(type(content)))
-        print("\t- content: {}".format(content))
-        print("\t- utf8 content: {}".format(content.decode('utf-8')))
+    url = "https://swapi.co/api/people"
+    params = {"search": sys.argv[1]}
+    results = requests.get(url, params=params).json()
+
+    print("Number of results: {}".format(results.get("count")))
+    [print(r.get("name")) for r in results.get("results")]
